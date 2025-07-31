@@ -1,0 +1,30 @@
+{
+    "manifest_version": 3,
+    "name": "Media Processor",
+    "version": "1.0",
+    "description": "Send URLs to Media Processor desktop application",
+    "permissions": [
+        "activeTab",
+        "contextMenus"
+    ],
+    "host_permissions": [
+        "<all_urls>"
+    ],
+    "background": {
+        "service_worker": "background.js"
+    },
+    "content_scripts": [
+        {
+            "matches": ["<all_urls>"],
+            "js": ["content.js"]
+        }
+    ],
+    "action": {
+        "default_popup": "popup.html",
+        "default_title": "Send to Media Processor"
+    },
+    "icons": {
+        "16": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAxNiAxNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTggMkw2LjQgNEg0QzMuNDQ3NzIgNCAzIDQuNDQ3NzIgMyA1VjEzQzMgMTMuNTUyMyAzLjQ0NzcyIDE0IDQgMTRIMTJDMTIuNTUyMyAxNCAxMyAxMy41NTIzIDEzIDEzVjVDMTMgNC40NDc3MiAxMi41NTIzIDQgMTIgNEg5LjZMOCAyWiIgZmlsbD0iIzQyODVGNCIvPgo8cGF0aCBkPSJNOCA2VjEwTDEwIDhMOCA2WiIgZmlsbD0id2hpdGUiLz4KPC9zdmc+",
+        "32": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTE2IDRMMTIuOCA4SDhDNi44OTU0MyA4IDYgOC44OTU0MyA2IDEwVjI2QzYgMjcuMTA0NiA2Ljg5NTQzIDI4IDggMjhIMjRDMjUuMTA0NiAyOCAyNiAyNy4xMDQ2IDI2IDI2VjEwQzI2IDguODk1NDMgMjUuMTA0NiA4IDI0IDhIMTkuMkwxNiA0WiIgZmlsbD0iIzQyODVGNCIvPgo8cGF0aCBkPSJNMTYgMTJWMjBMMjAgMTZMMTYgMTJaIiBmaWxsPSJ3aGl0ZSIvPgo8L3N2Zz4="
+    }
+}

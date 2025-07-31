@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Send to Media Processor</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .info {
+            background: #e8f4fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            border-left: 4px solid #2196f3;
+        }
+        .button {
+            display: inline-block;
+            background: #4CAF50;
+            color: white;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 10px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        .button:hover {
+            background: #45a049;
+        }
+        .button.secondary {
+            background: #2196f3;
+        }
+        .button.secondary:hover {
+            background: #1976d2;
+        }
+        .instructions {
+            text-align: left;
+            margin: 20px 0;
+        }
+        .instructions ol {
+            padding-left: 20px;
+        }
+        .instructions li {
+            margin: 10px 0;
+        }
+        .code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+        #urlDisplay {
+            word-break: break-all;
+            background: #f9f9f9;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎬 Send to Media Processor</h1>
+        
+        <div class="info">
+            <strong>Current URL:</strong>
+            <div id="urlDisplay">No URL detected</div>
+        </div>
+        
+        <div id="actionButtons" style="display: none;">
+            <a href="#" id="sendButton" class="button">📥 Send to Media Processor</a>
+            <a href="#" id="copyButton" class="button secondary">📋 Copy Protocol Link</a>
+        </div>
+        
+        <div class="instructions">
+            <h3>📌 How to use this bookmark:</h3>
+            <ol>
+                <li>Navigate to any video or audio page (YouTube, etc.)</li>
+                <li>Click this bookmark in your bookmarks bar</li>
+                <li>Click "Send to Media Processor" to add it to your download queue</li>
+            </ol>
+            
+            <h3>⚙️ Setup Instructions:</h3>
+            <ol>
+                <li>Drag this page to your bookmarks bar, or</li>
+                <li>Right-click and select "Bookmark this page"</li>
+                <li>Make sure Media Processor is running on your computer</li>
+                <li>Click the bookmark on any media page to send the URL</li>
+            </ol>
+        </div>
+        
+        <div class="info">
+            <strong>Note:</strong> This bookmark works by sending the current page URL to your Media Processor application.
+            Make sure the application is running and configured to accept browser integration.
+        </div>
+    </div>
+
+    <script>
+        // Get current URL
+        function getCurrentUrl() {
+            // Try different methods to get the current URL
+            return window.location.href || document.URL || document.location.href;
+        }
+        
+        // Check if we're in a bookmark context
+        function isBookmarklet() {
+            return window.location.href.startsWith('javascript:') || 
+                   document.referrer !== '' ||
+                   window.opener !== null;
+        }
+        
+        // Display current URL
+        function displayCurrentUrl() {
+            const url = getCurrentUrl();
+            const urlDisplay = document.getElementById('urlDisplay');
+            const actionButtons = document.getElementById('actionButtons');
+            
+            if (url && url !== 'about:blank' && !url.startsWith('file://')) {
+                urlDisplay.textContent = url;
+                actionButtons.style.display = 'block';
+                
+                // Setup send button
+                const sendButton = document.getElementById('sendButton');
+                sendButton.href = `mediaprocessor://${encodeURIComponent(url)}`;
+                
+                // Setup copy button
+                const copyButton = document.getElementById('copyButton');
+                copyButton.onclick = function(e) {
+                    e.preventDefault();
+                    const protocolUrl = `mediaprocessor://${encodeURIComponent(url)}`;
+                    
+                    // Try to copy to clipboard
+                    if (navigator.clipboard) {
+                        navigator.clipboard.writeText(protocolUrl).then(() => {
+                            alert('Protocol link copied to clipboard!');
+                        }).catch(() => {
+                            // Fallback
+                            prompt('Copy this link:', protocolUrl);
+                        });
+                    } else {
+                        // Fallback for older browsers
+                        prompt('Copy this link:', protocolUrl);
+                    }
+                };
+            } else {
+                urlDisplay.textContent = 'No valid URL detected. Please use this bookmark on a media page.';
+            }
+        }
+        
+        // Create bookmarklet code
+        function createBookmarklet() {
+            const bookmarkletCode = `javascript:(function(){
+                var url = window.location.href;
+                if (url && url.startsWith('http')) {
+                    window.open('mediaprocessor://' + encodeURIComponent(url), '_self');
+                } else {
+                    alert('Please use this bookmark on a valid web page.');
+                }
+            })();`;
+            
+            // Create a link element for the bookmarklet
+            const bookmarkletLink = document.createElement('a');
+            bookmarkletLink.href = bookmarkletCode;
+            bookmarkletLink.textContent = '📥 Media Processor Bookmarklet';
+            bookmarkletLink.className = 'button';
+            bookmarkletLink.style.display = 'block';
+            bookmarkletLink.style.margin = '20px auto';
+            bookmarkletLink.style.width = 'fit-content';
+            
+            // Add instructions
+            const instructions = document.createElement('div');
+            instructions.className = 'info';
+            instructions.innerHTML = '<strong>Drag this link to your bookmarks bar:</strong>';
+            
+            // Insert before the existing instructions
+            const container = document.querySelector('.container');
+            const existingInstructions = document.querySelector('.instructions');
+            container.insertBefore(instructions, existingInstructions);
+            container.insertBefore(bookmarkletLink, existingInstructions);
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            displayCurrentUrl();
+            createBookmarklet();
+        });
+        
+        // Update URL if it changes (for SPAs)
+        let lastUrl = getCurrentUrl();
+        setInterval(function() {
+            const currentUrl = getCurrentUrl();
+            if (currentUrl !== lastUrl) {
+                lastUrl = currentUrl;
+                displayCurrentUrl();
+            }
+        }, 1000);
+    </script>
+</body>
+</html>
