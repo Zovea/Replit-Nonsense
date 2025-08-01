@@ -2,6 +2,7 @@ modules = ["python-3.11"]
 
 [nix]
 channel = "stable-25_05"
+packages = ["ffmpeg"]
 
 [workflows]
 runButton = "Project"
@@ -13,20 +14,11 @@ author = "agent"
 
 [[workflows.workflow.tasks]]
 task = "workflow.run"
-args = "Media Processor App"
+args = "desktop-media-app"
 
 [[workflows.workflow.tasks]]
 task = "workflow.run"
-args = "desktop-media-app"
-
-[[workflows.workflow]]
-name = "Media Processor App"
-author = "agent"
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "pip install yt-dlp && python main.py"
-waitForPort = 5000
+args = "Desktop Media App"
 
 [[workflows.workflow]]
 name = "desktop-media-app"
@@ -35,3 +27,11 @@ author = "agent"
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "pip install tkinter yt-dlp && python main.py"
+
+[[workflows.workflow]]
+name = "Desktop Media App"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python main.py"

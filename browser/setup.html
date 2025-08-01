@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Media Processor - Setup Instructions</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #f8f9fa;
+            line-height: 1.6;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+        .subtitle {
+            color: #666;
+            font-size: 16px;
+            margin-bottom: 30px;
+        }
+        .step {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid #4285f4;
+        }
+        .step h3 {
+            margin-top: 0;
+            color: #333;
+        }
+        .code {
+            background: #f4f4f4;
+            padding: 12px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            margin: 10px 0;
+            word-break: break-all;
+        }
+        .button {
+            display: inline-block;
+            background: #4285f4;
+            color: white;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 6px;
+            margin: 10px 5px;
+            font-weight: 500;
+            transition: background-color 0.3s;
+        }
+        .button:hover {
+            background: #3367d6;
+        }
+        .button.secondary {
+            background: #f8f9fa;
+            color: #5f6368;
+            border: 1px solid #dadce0;
+        }
+        .button.secondary:hover {
+            background: #f1f3f4;
+        }
+        .warning {
+            background: #fff3cd;
+            color: #856404;
+            padding: 15px;
+            border-radius: 6px;
+            border: 1px solid #ffeaa7;
+            margin: 20px 0;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 6px;
+            border: 1px solid #c3e6cb;
+            margin: 20px 0;
+        }
+        .os-tabs {
+            display: flex;
+            margin: 20px 0;
+            border-bottom: 1px solid #dadce0;
+        }
+        .os-tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            font-weight: 500;
+        }
+        .os-tab.active {
+            color: #4285f4;
+            border-bottom-color: #4285f4;
+        }
+        .os-content {
+            display: none;
+        }
+        .os-content.active {
+            display: block;
+        }
+        ul {
+            padding-left: 20px;
+        }
+        li {
+            margin: 8px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Media Processor Setup</h1>
+        <p class="subtitle">Complete these steps to enable browser integration</p>
+        
+        <div class="step">
+            <h3>Step 1: Install Media Processor Desktop Application</h3>
+            <p>Make sure you have the Media Processor desktop application installed and running on your computer.</p>
+            <div class="success">
+                <strong>✓ Extension Installed:</strong> You already have the browser extension installed!
+            </div>
+        </div>
+        
+        <div class="step">
+            <h3>Step 2: Setup Protocol Handler</h3>
+            <p>The protocol handler allows the browser to communicate with your desktop application.</p>
+            
+            <div class="os-tabs">
+                <div class="os-tab active" onclick="showOS('windows')">Windows</div>
+                <div class="os-tab" onclick="showOS('mac')">macOS</div>
+                <div class="os-tab" onclick="showOS('linux')">Linux</div>
+            </div>
+            
+            <div id="windows" class="os-content active">
+                <h4>Windows Setup:</h4>
+                <ol>
+                    <li>Run the Media Processor application as Administrator (right-click → "Run as administrator")</li>
+                    <li>The application will automatically register the protocol handler</li>
+                    <li>If prompted by Windows, click "Yes" to allow the registration</li>
+                    <li>Restart your browser after first setup</li>
+                </ol>
+                <div class="warning">
+                    <strong>Note:</strong> You may need to run the application as Administrator the first time to register the protocol handler.
+                </div>
+            </div>
+            
+            <div id="mac" class="os-content">
+                <h4>macOS Setup:</h4>
+                <ol>
+                    <li>Run the Media Processor application</li>
+                    <li>The application will create the necessary protocol handler files</li>
+                    <li>You may need to approve the application in System Preferences → Security & Privacy</li>
+                    <li>Test the protocol by clicking a link below</li>
+                </ol>
+            </div>
+            
+            <div id="linux" class="os-content">
+                <h4>Linux Setup:</h4>
+                <ol>
+                    <li>Run the Media Processor application</li>
+                    <li>The application will create a .desktop file for protocol handling</li>
+                    <li>Run: <code>xdg-mime default mediaprocessor.desktop x-scheme-handler/mediaprocessor</code></li>
+                    <li>Restart your browser</li>
+                </ol>
+            </div>
+        </div>
+        
+        <div class="step">
+            <h3>Step 3: Test the Integration</h3>
+            <p>Click the button below to test if the protocol handler is working:</p>
+            <a href="mediaprocessor://https://www.youtube.com/watch?v=dQw4w9WgXcQ" class="button">
+                Test Protocol Handler
+            </a>
+            <p><small>This will try to send a YouTube URL to your Media Processor application.</small></p>
+        </div>
+        
+        <div class="step">
+            <h3>Step 4: How to Use</h3>
+            <p>Once setup is complete, you can send URLs to Media Processor in several ways:</p>
+            <ul>
+                <li><strong>Extension Button:</strong> Click the Media Processor icon in your browser toolbar</li>
+                <li><strong>Context Menu:</strong> Right-click on any page and select "Send to Media Processor"</li>
+                <li><strong>Bookmark:</strong> Use the provided bookmark on any media page</li>
+            </ul>
+        </div>
+        
+        <div class="step">
+            <h3>Troubleshooting</h3>
+            <h4>If the protocol handler isn't working:</h4>
+            <ul>
+                <li>Make sure Media Processor is running</li>
+                <li>Try restarting your browser</li>
+                <li>On Windows, try running Media Processor as Administrator once</li>
+                <li>Check that no firewall is blocking the application</li>
+            </ul>
+            
+            <h4>Alternative method - Copy and paste:</h4>
+            <p>If direct protocol handling doesn't work, you can copy protocol links and paste them into your address bar:</p>
+            <div class="code">mediaprocessor://https://example.com/video</div>
+        </div>
+        
+        <div style="text-align: center; margin-top: 40px;">
+            <a href="#" onclick="window.close()" class="button secondary">Close</a>
+            <a href="mailto:support@example.com" class="button secondary">Need Help?</a>
+        </div>
+    </div>
+
+    <script>
+        function showOS(os) {
+            // Hide all OS content
+            document.querySelectorAll('.os-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.querySelectorAll('.os-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected OS content
+            document.getElementById(os).classList.add('active');
+            event.target.classList.add('active');
+        }
+        
+        // Test if protocol handler is working
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add a test result area
+            const testButton = document.querySelector('a[href^="mediaprocessor://"]');
+            if (testButton) {
+                testButton.addEventListener('click', function(e) {
+                    setTimeout(() => {
+                        // If we're still on this page after 2 seconds, the protocol probably didn't work
+                        const resultDiv = document.createElement('div');
+                        resultDiv.className = 'warning';
+                        resultDiv.innerHTML = '<strong>Protocol test:</strong> If Media Processor didn\'t open, please check the setup steps above.';
+                        testButton.parentNode.appendChild(resultDiv);
+                    }, 2000);
+                });
+            }
+        });
+    </script>
+</body>
+</html>
