@@ -24,6 +24,8 @@ class MainWindow(DragDropMixin):
         # Initialize drag and drop
         super().__init__(root)
         
+        self.context_menu = self._create_context_menu()
+        
         self.setup_ui()
         self.setup_menu()
         self.bind_events()
@@ -149,6 +151,7 @@ class MainWindow(DragDropMixin):
     def bind_events(self):
         """Bind keyboard and other events"""
         self.url_entry.bind("<Return>", lambda e: self.add_url())
+        self.url_entry.bind("<Button-3>", self._show_context_menu)
         self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
         
     def add_url(self):
@@ -255,3 +258,15 @@ class MainWindow(DragDropMixin):
             self.processor.cleanup()
         except Exception as e:
             self.logger.error(f"Error during cleanup: {str(e)}")
+
+    def _create_context_menu(self):
+        """Create a right-click context menu for entry widgets"""
+        menu = tk.Menu(self.root, tearoff=0)
+        menu.add_command(label="Cut", command=lambda: self.root.focus_get().event_generate("<<Cut>>"))
+        menu.add_command(label="Copy", command=lambda: self.root.focus_get().event_generate("<<Copy>>"))
+        menu.add_command(label="Paste", command=lambda: self.root.focus_get().event_generate("<<Paste>>"))
+        return menu
+
+    def _show_context_menu(self, event):
+        """Display the context menu at the mouse position"""
+        self.context_menu.post(event.x_root, event.y_root)

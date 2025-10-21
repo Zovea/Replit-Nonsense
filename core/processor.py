@@ -18,11 +18,24 @@ class MediaProcessor:
         self.logger = logger
         self.downloader = MediaDownloader(config, logger)
         self.ffmpeg = FFMPEGWrapper(config, logger)
+
+        # Check for yt-dlp availability
+        self.yt_dlp_available = self.downloader.is_yt_dlp_available()
+        if not self.yt_dlp_available:
+            self.logger.warning("yt-dlp executable not found or not working. Please configure its path in settings.")
+
+        # Check for FFMPEG availability
+        self.ffmpeg_available = self.ffmpeg.is_available()
+        if not self.ffmpeg_available:
+            self.logger.warning("FFMPEG executable not found or not working. Please configure its path in settings.")
         
     def process_url(self, url, options=None, progress_callback=None):
         """Process a URL by downloading and optionally converting"""
         try:
             self.logger.info(f"Processing URL: {url}")
+
+            if not self.yt_dlp_available:
+                raise Exception("yt-dlp is not configured or not working. Please check settings.")
             
             # Check if URL is supported
             if not self.downloader.is_supported_url(url):
@@ -123,9 +136,8 @@ class MediaProcessor:
             if not self.config.getboolean('processing', 'auto_process', fallback=True):
                 return file_path
                 
-            # Check if FFMPEG is available
-            if not self.ffmpeg.is_available():
-                self.logger.warning("FFMPEG not available, skipping processing")
+            if not self.ffmpeg_available:
+                self.logger.warning("FFMPEG is not configured or not working, skipping processing.")
                 return file_path
                 
             # Determine output directory
