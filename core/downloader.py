@@ -14,6 +14,7 @@ class MediaDownloader:
     def __init__(self, config, logger):
         self.config = config
         self.logger = logger
+        self.yt_dlp_path = self.config.get('processing', 'yt_dlp_path', fallback='yt-dlp')
         self.active_processes = {}
         
     def is_supported_url(self, url):
@@ -25,7 +26,7 @@ class MediaDownloader:
                 return False
                 
             # Test with yt-dlp
-            cmd = ['yt-dlp', '--no-download', '--quiet', '--no-warnings', url]
+            cmd = [self.yt_dlp_path, '--no-download', '--quiet', '--no-warnings', url]
             result = subprocess.run(cmd, capture_output=True, timeout=30)
             return result.returncode == 0
             
@@ -37,7 +38,7 @@ class MediaDownloader:
         """Get media information without downloading"""
         try:
             cmd = [
-                'yt-dlp',
+                self.yt_dlp_path,
                 '--dump-json',
                 '--no-download',
                 '--quiet',
@@ -69,7 +70,7 @@ class MediaDownloader:
             os.makedirs(download_dir, exist_ok=True)
             
             # Build yt-dlp command
-            cmd = ['yt-dlp']
+            cmd = [self.yt_dlp_path]
             
             # Add output template
             naming_pattern = self.config.get('output', 'naming_pattern', 

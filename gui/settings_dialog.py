@@ -115,18 +115,29 @@ class SettingsDialog:
         ttk.Entry(ffmpeg_frame, textvariable=self.ffmpeg_path_var).grid(row=0, column=0, sticky=(tk.W, tk.E), padx=(0, 5))
         ttk.Button(ffmpeg_frame, text="Browse", command=self.browse_ffmpeg_path).grid(row=0, column=1)
         
+        # yt-dlp settings
+        ttk.Label(frame, text="yt-dlp Path:").grid(row=2, column=0, sticky=tk.W, pady=(0, 5))
+        
+        yt_dlp_frame = ttk.Frame(frame)
+        yt_dlp_frame.grid(row=3, column=0, columnspan=2, sticky=(tk.W, tk.E), pady=(0, 10))
+        yt_dlp_frame.columnconfigure(0, weight=1)
+        
+        self.yt_dlp_path_var = tk.StringVar()
+        ttk.Entry(yt_dlp_frame, textvariable=self.yt_dlp_path_var).grid(row=0, column=0, sticky=(tk.W, tk.E), padx=(0, 5))
+        ttk.Button(yt_dlp_frame, text="Browse", command=self.browse_yt_dlp_path).grid(row=0, column=1)
+        
         # Concurrent processing
-        ttk.Label(frame, text="Maximum Concurrent Downloads:").grid(row=2, column=0, sticky=tk.W, pady=(0, 5))
+        ttk.Label(frame, text="Maximum Concurrent Downloads:").grid(row=4, column=0, sticky=tk.W, pady=(0, 5))
         self.max_concurrent_var = tk.IntVar()
         concurrent_spin = ttk.Spinbox(frame, from_=1, to=8, textvariable=self.max_concurrent_var, width=10)
-        concurrent_spin.grid(row=3, column=0, sticky=tk.W, pady=(0, 10))
+        concurrent_spin.grid(row=5, column=0, sticky=tk.W, pady=(0, 10))
         
         # Processing options
         self.auto_process_var = tk.BooleanVar()
-        ttk.Checkbutton(frame, text="Auto-process downloaded files", variable=self.auto_process_var).grid(row=4, column=0, sticky=tk.W, pady=2)
+        ttk.Checkbutton(frame, text="Auto-process downloaded files", variable=self.auto_process_var).grid(row=6, column=0, sticky=tk.W, pady=2)
         
         self.delete_originals_var = tk.BooleanVar()
-        ttk.Checkbutton(frame, text="Delete original files after processing", variable=self.delete_originals_var).grid(row=5, column=0, sticky=tk.W, pady=2)
+        ttk.Checkbutton(frame, text="Delete original files after processing", variable=self.delete_originals_var).grid(row=7, column=0, sticky=tk.W, pady=2)
         
         frame.columnconfigure(0, weight=1)
         
@@ -218,6 +229,15 @@ class SettingsDialog:
         if filename:
             self.ffmpeg_path_var.set(filename)
             
+    def browse_yt_dlp_path(self):
+        """Browse for yt-dlp executable"""
+        filename = filedialog.askopenfilename(
+            title="Select yt-dlp Executable",
+            filetypes=[("Executable files", "*.exe"), ("All files", "*.*")]
+        )
+        if filename:
+            self.yt_dlp_path_var.set(filename)
+            
     def load_settings(self):
         """Load current settings into dialog"""
         # Download settings
@@ -230,6 +250,7 @@ class SettingsDialog:
         
         # Processing settings
         self.ffmpeg_path_var.set(self.config.get('processing', 'ffmpeg_path', fallback='ffmpeg'))
+        self.yt_dlp_path_var.set(self.config.get('processing', 'yt_dlp_path', fallback='yt-dlp'))
         self.max_concurrent_var.set(self.config.getint('processing', 'max_concurrent', fallback=2))
         self.auto_process_var.set(self.config.getboolean('processing', 'auto_process', fallback=True))
         self.delete_originals_var.set(self.config.getboolean('processing', 'delete_originals', fallback=False))
@@ -260,6 +281,7 @@ class SettingsDialog:
             
             # Processing settings
             self.config.set('processing', 'ffmpeg_path', self.ffmpeg_path_var.get())
+            self.config.set('processing', 'yt_dlp_path', self.yt_dlp_path_var.get())
             self.config.set('processing', 'max_concurrent', str(self.max_concurrent_var.get()))
             self.config.set('processing', 'auto_process', str(self.auto_process_var.get()))
             self.config.set('processing', 'delete_originals', str(self.delete_originals_var.get()))

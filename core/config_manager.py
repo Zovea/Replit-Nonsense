@@ -58,6 +58,7 @@ class ConfigManager:
             },
             'processing': {
                 'ffmpeg_path': 'ffmpeg',
+                'yt_dlp_path': 'yt-dlp',
                 'max_concurrent': '2',
                 'auto_process': 'True',
                 'delete_originals': 'False'
