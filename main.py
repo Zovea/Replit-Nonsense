@@ -33,7 +33,13 @@ class MediaProcessorApp:
             self.protocol_handler = ProtocolHandler()
             
             # Create main window
-            root = tk.Tk()
+            try:
+                from ttkthemes import ThemedTk
+                root = ThemedTk(theme="arc")
+            except ImportError:
+                root = tk.Tk()
+                messagebox.showwarning("Theme Warning", "ttkthemes library not found. The application will use the default theme.")
+
             self.main_window = MainWindow(root, self.config, self.logger)
             
             # Setup protocol handler callback
