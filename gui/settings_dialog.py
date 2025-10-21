@@ -257,7 +257,7 @@ class SettingsDialog:
         
         # Output settings
         self.output_dir_var.set(self.config.get('output', 'directory', fallback=os.path.expanduser('~/Downloads/Processed')))
-        self.naming_pattern_var.set(self.config.get('output', 'naming_pattern', fallback='%(title)s.%(ext)s'))
+        self.naming_pattern_var.set(self.config.get('output', 'naming_pattern', fallback='%(title)s.%(ext)s', raw=True))
         self.video_format_var.set(self.config.get('output', 'video_format', fallback='mp4'))
         self.audio_format_var.set(self.config.get('output', 'audio_format', fallback='mp3'))
         
